@@ -4,10 +4,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from mock import patch
 import json
+from bs4 import BeautifulSoup
+
 
 from .request_.offs_req import AllRequests
-from .models import ProductsNutriTypeA, Favorite
-from .views import search
+from .models import ProductsNutriTypeA, Favorite, PictureUser
+
+
 
 
 # Create your tests here.
@@ -22,7 +25,28 @@ class LoginTestDetailCase(TestCase):
     """Test login condition"""
     def setUp(self):
         self.contact = User.objects.create_user(username="marc", email="marc@mail.com", password='marc')
+        self.pic = PictureUser.objects.create(name="marc", id_user=self.contact, picture="test.png")
         self.bad_user = 'jean_marc'
+
+    def test_my_register_page(self):
+        response = self.client.get(reverse('store:register'), follow=True)
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, features="html.parser")
+        names = soup.find_all('input')
+        self.assertEqual(names[2]['name'], 'name')
+        self.assertEqual(names[3]['name'], 'email')
+        self.assertEqual(names[4]['name'], 'passwd')
+        self.assertEqual(names[5]['name'], 'picture')
+        dataRegister = {
+            'name': u'test',
+            'email': u'test@mail.com',
+            'passwd': u'test',
+            'id_user': self.contact,
+            'picture': u'test.png'
+        }
+        responsePost = self.client.post(reverse('store:register'), data=dataRegister)
+        self.assertEqual(responsePost.status_code, 200)
+        self.assertTemplateUsed(responsePost, 'store/thanks.html')
 
     def test_if_user_exist(self):
         """search user"""
@@ -44,15 +68,7 @@ class LoginTestDetailCase(TestCase):
         user = authenticate(username='marc', password='marc')
         self.assertTrue(user)
 
-    def test_change_pass_user(self):
-        """Test change password user"""
-        user = User.objects.get_by_natural_key("marc")
-        oldPasswd = user.password
-        user.set_password('marco')
-        user.save()
-        self.assertNotEqual(user.password, oldPasswd)
-        user = authenticate(username='marc', password='marco')
-        self.assertEqual(user.username, 'marc')
+
 
     def test_bad_login_user(self):
         """Test reconnect user"""

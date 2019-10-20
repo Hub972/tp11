@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, get_list_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -38,17 +38,24 @@ def register_(request):
     """display register page"""
     form = SearchProduct()
     if request.method == 'POST':
-        formr = Register(request.POST, error_class=ParagraphErrorList)
+        formr = Register(request.POST, request.FILES, error_class=ParagraphErrorList)
         if formr.is_valid():
-            name = formr.cleaned_data['name']
-            emailUser = formr.cleaned_data['email']
-            passwd = formr.cleaned_data['passwd']
-            user = User.objects.create_user(username=name, email=emailUser, password=passwd)
-            user.save()
-            formlg = LogIn()
-            context = {
-                'form': form}
-            return render(request, 'store/thanks.html', context)
+            with transaction.atomic():
+                name = formr.cleaned_data['name']
+                emailUser = formr.cleaned_data['email']
+                passwd = formr.cleaned_data['passwd']
+                picture = formr.cleaned_data['picture']
+                user = User.objects.create_user(username=name, email=emailUser, password=passwd)
+                user.save()
+                pic = PictureUser()
+                pic.name = name
+                pic.id_user = user
+                pic.picture = picture
+                pic.save()
+                formlg = LogIn()
+                context = {
+                    'form': form}
+                return render(request, 'store/thanks.html', context)
         else:
             forml = Register()
             context = {
@@ -82,67 +89,18 @@ def my_count(request):
     user = request.user.id
     try:
         picture = PictureUser.objects.get(id_user=user)
-        picture = picture.name
     except Exception:
         picture = ";-)"
-
     detUser = get_object_or_404(User, pk=user)
     name = detUser.username
     mail = detUser.email
     context = {'name': name,
                'mail': mail,
                'form': form,
-               'picture': picture,
+               'pic': picture,
                'passwd': passForm,
                }
     return render(request, 'store/my_place.html', context)
-
-
-def change_password(request):
-    """Script for confirm and change password user"""
-    if request.method == 'POST':
-        formp = ChangePassword(request.POST, error_class=ParagraphErrorList)
-        if formp.is_valid():
-            userId = request.user.id
-            detUser = get_object_or_404(User, pk=userId)
-            passwd = formp.cleaned_data['passwd']
-            confPasswd = formp.cleaned_data['confPasswd']
-            if passwd != confPasswd:
-                form = SearchProduct()
-                passForm = ChangePassword()
-                try:
-                    picture = PictureUser.objects.get(id_user=userId)
-                    picture = picture.name
-                except Exception:
-                    picture = ";-)"
-                context = {
-                    'name': detUser.username,
-                    'mail': detUser.email,
-                    'form': form,
-                    'picture': picture,
-                    'passwd': passForm,
-                    'logEr': True
-                }
-                return render(request, 'store/my_place.html', context)
-            else:
-                detUser.set_password(passwd)
-                detUser.save()
-                form = SearchProduct()
-                passForm = ChangePassword()
-                try:
-                    picture = PictureUser.objects.get(id_user=userId)
-                    picture = picture.name
-                except Exception:
-                    picture = ";-)"
-                context = {
-                    'name': detUser.username,
-                    'mail': detUser.email,
-                    'form': form,
-                    'picture': picture,
-                    'passwd': passForm,
-                    'done': True
-                }
-                return render(request, 'store/my_place.html', context)
 
 
 def connect_user(request):
@@ -314,7 +272,7 @@ def detail(request, id):
 def log_out(request):
     """Disconnect user"""
     logout(request)
-    return HttpResponseRedirect('store/index.html')
+    return redirect('/')
 
 
 def terms(request):

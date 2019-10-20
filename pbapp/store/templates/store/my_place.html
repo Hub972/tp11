@@ -6,7 +6,7 @@
     <div class="container">
        <div class="row justify-content-center">
         <div class="col-lg-8 text-center">
-            <img  src="{% static 'store/img/user/' %}{{ picture }}" alt="{{ name }}">
+            <img  src="{{ pic.picture.url }}" alt="{{ name }}">
           <h1 class="text-white mt-0 text-center">{{ name }}</h1>
           <hr class="divider light my-4">
 
@@ -25,15 +25,6 @@
         <div class="col-lg-8 text-center">
           <h1 class="text-white mt-0">{{ mail }}</h1>
           <hr class="divider light my-4">
-            <p class="text-white mt-0">Vous pouvez changer votre mot de passe ici </p>
-            <form class="form-inline" action="{% url 'store:changePasswd' %}" method="post">
-                {% csrf_token %}
-            {{ passwd }}
-                <button type="submit" class="btn btn-success"><i class="fas fa-save">Changer</i></button>
-            </form>
-            {% if done == True %}<p class="text-white mt-0">Vous avez changé votre mot de passe</p>
-            {% elif logEr == True %}<h3 class="text-white mt-0 text-center">Veuillez vérifier vos informations</h3>
-            {% endif %}
         </div>
       </div>>
 

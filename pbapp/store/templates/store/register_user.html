@@ -2,7 +2,7 @@
 {% block content %}
 
 
-    <form action="{% url 'store:register' %}" method="post">
+    <form action="{% url 'store:register' %}" enctype="multipart/form-data" method="post">
       <p><h1><br><br><br></h1></p>
     {% csrf_token %}
       {{ forml }}
