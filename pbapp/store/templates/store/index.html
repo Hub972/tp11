@@ -1,0 +1,74 @@
+{% extends 'store/base.html' %}
+{% block content %}
+{% load static %}
+{% if productAdd == True %}
+                   <p><br><br></p>
+                    <div class="container">
+                        <h2 class="mt-0" style="color:green;">Le produit {{name}} a bien été rajouté a vos favorits.</h2>
+                    </div>
+{% endif %}
+  <section class="page-section justify-content-center" id="about">
+    <div class="container">
+       <div class="row justify-content-center" >
+        <div class="col-lg-8 text-center">
+          <h1 class="text-white mt-0 text-center">Du gras oui mais de qualité</h1>
+          <h2 class="text-white mt-0">Trouvez un produit de substitution <br>pour ceux que vous consommez tous les jours</h2>
+          <hr class="divider light my-4">
+            <form class="form-inline" action="{% url 'store:search' %}" method="get">
+
+         {{ form }}
+          <button type="submit" class="btn btn-success" >Chercher</button>
+                {% if badSearch == True %}
+                    <h2 class="mt-0" style="color:red;">Le produit que vous recherchez n'existe pas.</h2>
+                {% endif %}
+
+            </form>
+        </div>
+      </div>>
+
+        </div>
+  </section>
+ <section class="page-section" id="contact">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h2 class="text-white mt-0">Colette et Remy</h2>
+          <hr class="divider light my-4">
+          <p class="text-white-50 mb-4">Remy et Colette sont amoureux de la gastronomie française (on ne peut les blâmer !). Travaillant quotidiennement avec les meilleurs produits du terroir, ils affectionnent particulièrement la bonne chaire et aiment partager leur passion.</p>
+        </div>
+
+        <div class="col-md-6">
+          <img src="{% static 'store/img/colette-tatou1.png' %}" alt="imgCo">
+          <img src="{% static 'store/img/ratatouille2.png' %}" alt="imgRe">
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="page-section justify-content-center" id="services" >
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+<h2 class="text-white mt-0 text-center">Contactez-nous</h2>
+<hr class="divider my-4">
+          <p class="mb-4 text-center" style="color:green;">La maison est grande ouverte.</p>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-lg-4 ml-auto text-center mb-5 mb-lg-0">
+          <i class="fas fa-phone fa-3x mb-3 text-muted"></i>
+          <div class="text-white-50 mb-4"><p style="color:orange;">+1 (202) 555-0149</p></div>
+        </div>
+        <div class="col-lg-4 mr-auto text-center">
+          <i class="fas fa-envelope fa-3x mb-3 text-muted"></i>
+          <!-- Make sure to change the email address in anchor text AND the link below! -->
+          <div class="text-white-50 mb-4"><a href="mailto:contact@yourwebsite.com"><p style="color:orange;">contact@yourwebsite.com</p></a> </div>
+        </div>
+      </div>>
+
+
+      </div>
+    </div>
+  </section>
+{% endblock %}

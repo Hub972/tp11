@@ -1,0 +1,45 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<section  class="page-section" >
+    <div class="container">
+      <div class="row justify-content-center">
+
+        <div class="col-lg-8 text-center">
+            <img src="{{ picture }}" alt="productPicture">
+          <h2 class="text-white mt-0">Mes produits favoris</h2>
+          <hr class="divider light my-4">
+          <p class="text-white-50 mb-4">Ici vous pouvez retrouver vos produits de meilleurs qualité, n'hésitez pas à faire de nouvelle expériences culinaire car le meilleur reste à venir.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    {% for prd in products %}
+
+            <div class="col-md-4 result">
+            <a href="{% url 'store:detail' id=prd.id %}">
+              <img class="img-responsive" src="{{ prd.picture }}" alt="{{ prd.name }}" width="auto" height="300">
+            </a>
+            <h3><a>{{ prd.name }}</a></h3>
+        </div>
+        {% if forloop.counter|divisibleby:3 %}<div class="clearfix"></div>{% endif %}
+
+
+{% endfor %}
+<div class="pagination">
+  <div class="clearfix"></div>
+  <nav aria-label="">
+    <ul class="pager">
+        <div class="row">
+      {% if products.has_previous %}
+        <div class="col-md-6 text-center"><li class="col-md-6"><a href="?page={{ products.previous_page_number }}">Précédent</a></li></div>
+      {% endif %}
+      {% if products.has_next %}
+        <div class="col-md-6 text-center"><li><a href="?page={{ products.next_page_number }}">Suivant</a></li></div>
+      {% endif %}</div>
+    </ul>
+  </nav>
+</div>
+<section><p> <br><br></p></section>
+
+{% endblock %}

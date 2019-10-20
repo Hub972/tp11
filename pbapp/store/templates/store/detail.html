@@ -1,0 +1,39 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+{% load static %}
+ <section class="page-section" >
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <img src="{{ picture }}" alt="productPicture">
+          <h2 class="text-white mt-0">{{ name }}</h2>
+          <hr class="divider light my-4">
+          <p class="text-white-50 mb-4">Remy et Colette sont amoureux de la gastronomie française (on ne peut les blâmer !). Travaillant quotidiennement avec les meilleurs produits du terroir, ils affectionnent particulièrement la bonne chaire et aiment partager leur passion.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="page-section">
+    <div class="container justify-content-center">
+    <div class="row text-center" >
+<img src="{{ nutri_score }}" align="right" alt="nutri_score" style="padding-left: 74px;">
+        </div>
+    </div>
+
+<p><br></p>
+    <div class="container">
+    <div class="row text-right ">
+    <img src="{{ nutri_pic }}" align="right" alt="imgNutri" >
+    </div>
+    </div>
+
+    <p><br></p>
+    <div class="container">
+    <div class="box text-center">
+    <a class="btn btn-light btn-xl js-scroll-trigger"  href="https://fr.openfoodfacts.org/produit/{{ code }}">Page officielle du produit</a>
+    </div>
+    </div>
+</section>
+{% endblock %}

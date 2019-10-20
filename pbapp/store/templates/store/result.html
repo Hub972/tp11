@@ -1,0 +1,57 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<section  class="page-section" >
+    <div class="container">
+
+      <div class="row justify-content-center">
+
+        <div class="col-lg-8 text-center">
+            <img src="{{ picture }}" alt="productPicture">
+          <h2 class="text-white mt-0">{{ name }}</h2>
+          <hr class="divider light my-4">
+          <p class="text-white-50 mb-4">Les produits proposés par les grandes marques sont-ils de qualité supérieure par rapport aux produits sans marque ? La question mérite d’être posée. Ici pas de distinction de marque mais de qualité</p>
+        </div>
+      </div>
+    </div>
+  </section>
+<div class="container">
+<div class="col-lg-8 text-center">
+<p class="text-white-50 mb-4 text-center">Vous pouvez remplacer ce produit par:</p>
+</div>
+</div>
+{% for prd in product %}
+
+        <div class="col-md-4 result" >
+
+            <a href="{% url 'store:detail' id=prd.id %}"><em>Voir produit</em> </a><div class="text-right"><i class="fas fa-font" style="color:green;"></i></div><p><br></p>
+
+              <img class="img-responsive" src="{{ prd.picture }}" alt="{{ prd.product_name }}" width="auto" height="300">
+
+            <h3><a href="{% url 'store:add' product_id=prd.id %}"><i class="fas fa-save"></i>{{ prd.product_name }}</a></h3>
+        </div>
+        {% if forloop.counter|divisibleby:3 %}<div class="clearfix"></div>{% endif %}
+
+
+{% endfor %}
+<div class="pagination">
+  <div class="clearfix"></div>
+  <nav aria-label="">
+    <ul class="pager">
+        <div class="row">
+      {% if product.has_previous %}
+        <div class="col-md-6 text-center"><li class="col-md-6"><a href="?search={{ item }}&page={{ product.previous_page_number }}">Précédent</a></li></div>
+      {% endif %}
+      {% if product.has_next %}
+        <div class="col-md-6 text-center"><li><a href="?search={{ item }}&page={{ product.next_page_number }}">Suivant</a></li></div>
+      {% endif %}</div>
+    </ul>
+  </nav>
+</div>
+<section><p> <br><br></p></section>
+
+
+
+
+
+{% endblock %}

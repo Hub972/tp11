@@ -1,0 +1,21 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<section class="justify-content-center">
+<div class="box"></div>
+</section>
+ <form action="{% url 'store:connect' %}" method="post">
+     <p><h1><br><br><br></h1></p>
+      {% csrf_token %}
+    {{ formlg }}
+      <button type="submit" class="btn btn-success"><i class="fas fa-save">Connecter</i></button>
+      <h3 class="text-white mt-0 text-center">  <a href="{% url 'store:register' %}"><em>Inscription</em></a> </h3>
+      {% if logEr == True %}<h3 class="text-white mt-0 text-center">Veuillez vérifier vos informations, ou vous enregistrer via le lien ci-dessus. Merci.</h3>{% endif %}
+  </form>
+
+
+
+
+
+
+{% endblock %}

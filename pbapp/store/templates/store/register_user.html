@@ -1,0 +1,14 @@
+{% extends 'store/base.html' %}
+{% block content %}
+
+
+    <form action="{% url 'store:register' %}" method="post">
+      <p><h1><br><br><br></h1></p>
+    {% csrf_token %}
+      {{ forml }}
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+        {% if logEr == True %}<h3 class="text-white mt-0 text-center">Veuillez vérifier vos informations. Merci.</h3>{% endif %}
+</form>
+
+
+{% endblock %}
