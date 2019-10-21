@@ -91,7 +91,7 @@ class LoginTestDetailCase(TestCase):
         req.user = self.contact
         req.method = "POST"
         response1 = change_password(req)
-        self.assertEqual(response1.status_code, 200)
+        self.assertEqual(response1.status_code, 302)
         user = authenticate(username='marc', password='test')
         self.assertIsNotNone(user)
         self.assertNotEqual(user.password, user1.password)
