@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 
 from .request_.offs_req import AllRequests
 from .models import ProductsNutriTypeA, Favorite, PictureUser
-from .views import my_count
+from .views import my_count, change_password
 
 
 # Create your tests here.
@@ -80,6 +80,21 @@ class LoginTestDetailCase(TestCase):
         """Test reconnect user"""
         user = authenticate(username='marc', password='m')
         self.assertFalse(user)
+
+    def test_change_pass_user(self):
+        """Test change password user"""
+        factory = RequestFactory()
+        user1 = authenticate(username='marc', password='marc')
+        self.assertIsNotNone(user1)
+        login_passwd_test_data = {'passwd': u'test', 'confPasswd': u'test'}
+        req = factory.post('/change_pass', data=login_passwd_test_data)
+        req.user = self.contact
+        req.method = "POST"
+        response1 = change_password(req)
+        self.assertEqual(response1.status_code, 200)
+        user = authenticate(username='marc', password='test')
+        self.assertIsNotNone(user)
+        self.assertNotEqual(user.password, user1.password)
 
 
 class MockCase(TestCase):
