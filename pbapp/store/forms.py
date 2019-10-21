@@ -20,7 +20,7 @@ class Register(forms.Form):
         widget=forms.PasswordInput(attrs={'class': 'form-group', 'placeholder': 'Mot de passe'}),
         required=True
     )
-    image = forms.ImageField(
+    picture = forms.ImageField(
         label='Image',
         widget=forms.FileInput(attrs={'class': 'form-group', 'placeholder': 'glisser une image ici'}),
         required=False

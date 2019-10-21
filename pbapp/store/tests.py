@@ -1,4 +1,5 @@
-from django.test import TestCase
+from django.http import request
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -9,8 +10,7 @@ from bs4 import BeautifulSoup
 
 from .request_.offs_req import AllRequests
 from .models import ProductsNutriTypeA, Favorite, PictureUser
-
-
+from .views import my_count
 
 
 # Create your tests here.
@@ -29,6 +29,7 @@ class LoginTestDetailCase(TestCase):
         self.bad_user = 'jean_marc'
 
     def test_my_register_page(self):
+        """Test register content, redirect and my place page """
         response = self.client.get(reverse('store:register'), follow=True)
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, features="html.parser")
@@ -47,6 +48,13 @@ class LoginTestDetailCase(TestCase):
         responsePost = self.client.post(reverse('store:register'), data=dataRegister)
         self.assertEqual(responsePost.status_code, 200)
         self.assertTemplateUsed(responsePost, 'store/thanks.html')
+        userReg = authenticate(username='test', password='test')
+        self.assertIsNotNone(userReg)
+        foctory = RequestFactory()
+        req = foctory.get('/my_count/')
+        req.user = self.contact
+        responseMyPlace = my_count(req)
+        self.assertEqual(responseMyPlace.status_code, 200)
 
     def test_if_user_exist(self):
         """search user"""
@@ -67,8 +75,6 @@ class LoginTestDetailCase(TestCase):
         """Test reconnect user"""
         user = authenticate(username='marc', password='marc')
         self.assertTrue(user)
-
-
 
     def test_bad_login_user(self):
         """Test reconnect user"""
